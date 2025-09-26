@@ -25,3 +25,29 @@ ON p.category_id = c.category_id
 WHERE year(o.order_date)=YEAR(curdate())-1
 GROUP BY c.category_name
 ORDER BY Total_revenue DESC;
+
+SELECT c.customer_id, AVG(order_total) as "avg_order_value"
+FROM customers c
+JOIN
+orders o 
+ON c.customer_id = o.customer_id
+JOIN( SELECT
+oi.order_id,
+SUM(oi.quantity * oi.list_price * (1-oi.discount)) as order_total
+FROM order_items oi
+GROUP BY oi.order_id
+) oi
+ON o.order_id = oi.order_id
+GROUP BY c.customer_id
+ORDER BY avg_order_value DESC;
+
+SELECT st.store_name, p.product_name, SUM(s.quantity) as "total_stock"
+FROM stocks s
+JOIN
+products p 
+ON s.product_id = p.product_id
+JOIN
+stores st
+ON st.store_id = s.store_id 
+GROUP BY st.store_name, p.product_name
+ORDER BY total_stock Asc;
