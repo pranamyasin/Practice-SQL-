@@ -51,3 +51,24 @@ stores st
 ON st.store_id = s.store_id 
 GROUP BY st.store_name, p.product_name
 ORDER BY total_stock Asc;
+
+SELECT b.brand_name, SUM(oi.quantity * oi.list_price * (1-oi.discount))  as "revenue"
+FROM brands b
+JOIN
+products p 
+ON b.brand_id = p.brand_id
+JOIN
+order_items oi
+ON p.product_id = oi.product_id
+GROUP BY b.brand_name
+ORDER BY revenue DESC;
+
+SELECT c.customer_id ,c.first_name, c.last_name, COUNT(o.order_id) as "no_of_orders"
+FROM customers c
+JOIN
+orders o
+ON
+c.customer_id = o.customer_id
+GROUP BY customer_id
+ORDER BY no_of_orders DESC, first_name ASC, last_name ASC
+LIMIT 3;
