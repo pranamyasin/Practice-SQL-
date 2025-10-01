@@ -1,4 +1,5 @@
 use bike;
+
 SELECT sum(oi.quantity*oi.list_price) as'total_sales', o.store_id 
 FROM order_items oi
 JOIN
@@ -69,6 +70,17 @@ JOIN
 orders o
 ON
 c.customer_id = o.customer_id
+GROUP BY customer_id
+ORDER BY no_of_orders DESC, first_name ASC, last_name ASC
+LIMIT 3;
+
+SELECT c.customer_id ,c.first_name, c.last_name, COUNT(o.order_id) as "no_of_orders"
+FROM customers c
+JOIN
+orders o
+ON
+c.customer_id = o.customer_id
+WHERE o.order_date>=date_sub(curdate(), INTERVAL 6 MONTH)
 GROUP BY customer_id
 ORDER BY no_of_orders DESC, first_name ASC, last_name ASC
 LIMIT 3;
